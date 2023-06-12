@@ -35,6 +35,16 @@ class Application {
         return new PIXI.AnimatedSprite(textures)
     }
 
+    ListOfTexture(keyCode) {
+        let textures = []
+        const keys2 = Object.keys(this.List[keyCode]);
+        const mappedArray2 = keys2.map(key => this.List[keyCode][key]);
+        for (var i = 0; i < mappedArray2.length; i++) {
+            textures.push(mappedArray2[i])
+        }
+        return textures
+    }
+
     start() {
         this.scenes.start("Game");
     }

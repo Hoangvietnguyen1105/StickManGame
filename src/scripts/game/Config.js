@@ -7,7 +7,23 @@ export const Config = {
     player: {
         "height": 100,
         "width": 100,
-        "x": 100,
-        "y": 100
+        "x": 25,
+        "y": 800,
+        "animatedSpeed": 0.15,
+        "speed": 5,
+        "realWidth": 50,
+        "jumpHight": 90,
+    },
+    bot: {
+        "height": 100,
+        "width": 100,
+        "x": 525,
+        "y": 800,
+        "animatedSpeed": 0.15,
+        "speed": 5,
+        "realWidth": 50,
+        "jumpHight": 90,
+        "timePunch": 500,
+        "life": 5
     }
 };
