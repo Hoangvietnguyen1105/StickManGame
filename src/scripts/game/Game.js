@@ -28,71 +28,70 @@ export class Game extends Scene {
     }
 
     createBot() {
-        this.List = []
+        this.botList = [];
         for (var i = 0; i < 3; i++) {
-            var botTmp = new bot(this.player.Player)
+            var botTmp = new bot(this.player.Player);
+            botTmp.botSprite.x += i * 40;
             this.container.addChild(botTmp.botSprite);
-            botTmp.botSprite.x += i * 40
-            this.List.push(this.bot)
+            this.botList.push(botTmp);
         }
-        this.bot = new bot(this.player.Player)
-        this.container.addChild(this.bot.botSprite);
     }
 
     follow(deltaTime) {
-        if (this.bot.destroyed) return; // Kiểm tra trạng thái đã bị hủy
-
-        this.bot.update(deltaTime);
+        this.botList.forEach(bot => {
+            if (!bot.destroyed) {
+                bot.update(deltaTime);
+            }
+        });
         this.checkDame();
         this.checkDame2();
     }
 
     checkDame() {
-        if (this.bot.destroyed) return; // Kiểm tra trạng thái đã bị hủy
-
-        if (this.player.isPunch === true) {
-            this.player.isPunch = false;
-            if (this.player.Player.scale.x === 0.5) {
-                if (this.checkCollision(this.player.Player, this.bot.botSprite)) {
-                    this.bot.botSprite.pain = true;
-                    this.bot.scaleD = true;
-                    this.bot.scaleA = false;
-                }
-            } else {
-                if (this.checkCollision2(this.player.Player, this.bot.botSprite)) {
-                    this.bot.botSprite.pain = true;
-                    this.bot.scaleD = false;
-                    this.bot.scaleA = false;
+        this.botList.forEach(bot => {
+            if (!bot.destroyed && this.player.isPunch === true) {
+                this.player.isPunch = false;
+                if (this.player.Player.scale.x === 0.5) {
+                    if (this.checkCollision(this.player.Player, bot.botSprite)) {
+                        bot.botSprite.pain = true;
+                        bot.scaleD = true;
+                        bot.scaleA = false;
+                    }
+                } else {
+                    if (this.checkCollision2(this.player.Player, bot.botSprite)) {
+                        bot.botSprite.pain = true;
+                        bot.scaleD = false;
+                        bot.scaleA = false;
+                    }
                 }
             }
-        }
 
-        if (this.bot.botSprite.life <= 0) {
-            this.bot.destroyed = true
-            this.container.removeChild(this.bot.botSprite)
-
-        }
+            if (bot.botSprite.life <= 0) {
+                bot.destroyed = true;
+                this.container.removeChild(bot.botSprite);
+            }
+        });
     }
 
     checkDame2() {
-        if (this.bot.destroyed) return; // Kiểm tra trạng thái đã bị hủy
-
-        if (this.bot.botSprite.isPunch === true) {
-            this.bot.botSprite.isPunch = false;
-            if (this.bot.botSprite.scale.x === -0.5) {
-                if (this.checkCollision(this.player.Player, this.bot.botSprite)) {
-                    this.player.pain = true;
-                    this.player.scaleD = true;
-                    this.player.scaleA = false;
-                }
-            } else {
-                if (this.checkCollision2(this.player.Player, this.bot.botSprite)) {
-                    this.player.pain = true;
-                    this.player.scaleD = false;
-                    this.player.scaleA = false;
+        this.botList.forEach(bot => {
+            if (!bot.destroyed && bot.botSprite.isPunch === true) {
+                bot.botSprite.isPunch = false;
+                if (bot.botSprite.scale.x === -0.5) {
+                    if (this.checkCollision(this.player.Player, bot.botSprite)) {
+                        this.player.pain = true;
+                        this.player.scaleD = true;
+                        this.player.scaleA = false;
+                    }
+                } else {
+                    if (this.checkCollision2(this.player.Player, bot.botSprite)) {
+                        this.player.pain = true;
+                        this.player.scaleD = false;
+                        this.player.scaleA = false;
+                    }
                 }
             }
-        }
+        });
 
         if (this.player.life <= 0) {
             this.container.removeChild(this.player.Player);

@@ -202,31 +202,7 @@ export class Player {
         }
 
     }
-    destroy() {
-        window.removeEventListener("keydown", this.boundHandleKeyDown);
-        window.removeEventListener("keyup", this.boundHandleKeyUp);
-        App.app.ticker.remove(this.update, this);
 
-        // Xoá sprite Player
-        this.Player.stop(); // Dừng hoạt ảnh nếu đang chạy
-        this.Player.destroy(); // Xoá sprite Player
-
-        // Xoá các mảng texture
-        this.punchAnimation.forEach(texture => texture.destroy());
-        this.runAnimation.forEach(texture => texture.destroy());
-
-        // Thiết lập tất cả các thuộc tính và tham chiếu về null hoặc undefined
-        this.punchAnimation = null;
-        this.runAnimation = null;
-        this.Player = null;
-        this.moveLeft = null;
-        this.moveRight = null;
-        this.isJump = null;
-        this.isDown = null;
-        this.punch = null;
-        this.checkPunch = null;
-        this.jumpHight = null;
-    }
 
 
 
