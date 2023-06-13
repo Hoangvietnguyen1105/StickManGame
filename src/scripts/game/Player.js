@@ -129,6 +129,8 @@ export class Player {
         });
     }
 
+   
+
 
 
     update() {

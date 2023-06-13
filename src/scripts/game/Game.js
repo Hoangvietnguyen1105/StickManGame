@@ -2,6 +2,7 @@ import { App } from "../system/App";
 import { Scene } from "../system/Scene";
 import { Player } from "./Player";
 import { bot } from "./bot";
+import { Wall } from "./Wall";
 import * as PIXI from 'pixi.js'
 
 export class Game extends Scene {
@@ -9,6 +10,7 @@ export class Game extends Scene {
         this.createBackground();
         this.createPlayer();
         this.createBot();
+        this.createWall()
         App.app.ticker.add((delta) => {
             const deltaTime = delta / PIXI.settings.TARGET_FPMS;
             this.follow(deltaTime); // Truyền delta time vào phương thức follow
@@ -37,6 +39,12 @@ export class Game extends Scene {
         }
     }
 
+    createWall() {
+        console.log('create wall')
+        this.wall = new Wall()
+        this.container.addChild(this.wall)
+    }
+
     follow(deltaTime) {
         this.botList.forEach(bot => {
             if (!bot.destroyed) {
@@ -48,20 +56,23 @@ export class Game extends Scene {
     }
 
     checkDame() {
+        let playerPunched = false; // Biến để kiểm tra xem người chơi đã tác động đến ít nhất một bot hay chưa
+
         this.botList.forEach(bot => {
             if (!bot.destroyed && this.player.isPunch === true) {
-                this.player.isPunch = false;
                 if (this.player.Player.scale.x === 0.5) {
                     if (this.checkCollision(this.player.Player, bot.botSprite)) {
                         bot.botSprite.pain = true;
                         bot.scaleD = true;
                         bot.scaleA = false;
+                        playerPunched = true; // Đánh dấu là người chơi đã tác động đến bot
                     }
                 } else {
                     if (this.checkCollision2(this.player.Player, bot.botSprite)) {
                         bot.botSprite.pain = true;
                         bot.scaleD = false;
                         bot.scaleA = false;
+                        playerPunched = true; // Đánh dấu là người chơi đã tác động đến bot
                     }
                 }
             }
@@ -71,9 +82,16 @@ export class Game extends Scene {
                 this.container.removeChild(bot.botSprite);
             }
         });
+
+        // Nếu người chơi đã tác động đến ít nhất một bot, reset trạng thái đấm của người chơi
+        if (playerPunched) {
+            this.player.isPunch = false;
+        }
     }
 
+
     checkDame2() {
+
         this.botList.forEach(bot => {
             if (!bot.destroyed && bot.botSprite.isPunch === true) {
                 bot.botSprite.isPunch = false;

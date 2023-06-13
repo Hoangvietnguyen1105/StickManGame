@@ -25,5 +25,19 @@ export const Config = {
         "jumpHight": 90,
         "timePunch": 500,
         "life": 5
-    }
+    },
+    wall: [
+        {
+            "x": 100,
+            "y": 780,
+            "number": 5,
+            "width": 32,
+        },
+        {
+            "x": 10,
+            "y": 10,
+            "number": 10,
+            "width": 32,
+        }
+    ]
 };

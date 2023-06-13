@@ -95,6 +95,23 @@ export class bot {
 
         }
     }
+    loadPain() {
+        this.botSprite.life -= 1
+        this.botSprite.gotoAndStop(0)
+        this.botSprite.painLoad = false
+        this.timeStay = 500
+        this.botSprite.textures = this.runAnimation;
+        this.botSprite.play()
+    }
+
+    painBack() {
+        if (this.scaleD === true) {
+            this.botSprite.x += 10
+        }
+        else {
+            this.botSprite.x -= 10
+        }
+    }
 
     moveLeft() {
         if (this.botSprite.textures !== this.runAnimation) {
@@ -127,19 +144,9 @@ export class bot {
             }
             //hàm này check xem hành động pain đã xảy ra chưa, nếu xảy ra xong rồi mới tới hành động khác 
             else if (this.botSprite.painLoad === true) {
-                if (this.scaleD === true) {
-                    this.botSprite.x += 10
-                }
-                else {
-                    this.botSprite.x -= 10
-                }
+                this.painBack()
                 if (this.botSprite.currentFrame === 1) {
-                    this.botSprite.life -= 1
-                    this.botSprite.gotoAndStop(0)
-                    this.botSprite.painLoad = false
-                    this.timeStay = 500
-                    this.botSprite.textures = this.runAnimation;
-                    this.botSprite.play()
+                    this.loadPain()
                 }
                 else {
                     return
@@ -151,7 +158,9 @@ export class bot {
             }
             else if (this.botSprite.botPunch === true && this.botSprite.botPunchLoad !== true) {
                 if (this.timePunch < 0) {
-                    this.startPunch()
+                    if (Math.floor(Math.random() * 10) + 1 === 3 || Math.floor(Math.random() * 10) + 1 === 5) {
+                        this.startPunch();
+                    }
                 }
             }
 
@@ -162,19 +171,6 @@ export class bot {
                 this.moveRight()
             }
         }
-    }
-    destroy() {
-        // Hủy bỏ các tham chiếu và giải phóng tài nguyên
-        this.player = null;
-        this.punchAnimation = null;
-        this.runAnimation = null;
-        this.painAnimation = null;
-        this.botSprite.destroy({ children: true, texture: true, baseTexture: true });
-
-        // Xóa các thuộc tính
-        delete this.botSprite;
-        delete this.timePunch;
-        delete this.timeStay;
     }
 
 }
