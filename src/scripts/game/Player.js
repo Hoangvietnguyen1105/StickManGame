@@ -1,9 +1,10 @@
 import * as PIXI from 'pixi.js'
 import { App } from '../system/App'
-
+import { Sound } from "@pixi/sound";
 export class Player {
     constructor() {
         this.createPlayer()
+        this.createSound()
         //Tạo các sự kiện cho ấn phím 
         this.boundHandleKeyDown = this.handleKeyDown.bind(this);
         this.boundHandleKeyUp = this.handleKeyUp.bind(this);
@@ -36,6 +37,7 @@ export class Player {
                 break;
             case 32:
                 if (this.punch === false) {
+                    this.punchSound.play()
                     this.swapAnimation()
                     this.Player.play()
                     this.punch = true
@@ -92,6 +94,13 @@ export class Player {
         this.Player.y += App.config.player['speed']
     }
 
+    createSound() {
+        this.punchSound = Sound.from("../../../assets/sounds/6.ogg");
+        this.punchSound.volume = 0.5
+        this.painSound = Sound.from("../../../assets/sounds/pain1.wav")
+        this.painSound.volume = 0.5
+    }
+
 
 
     createPlayer() {
@@ -129,13 +138,12 @@ export class Player {
         });
     }
 
-   
+
 
 
 
     update() {
         if (this.painLoad === true) {
-            console.log(this.Player.currentFrame)
             if (this.scaleD !== true) {
                 this.Player.x += 10
             }
@@ -149,6 +157,7 @@ export class Player {
             }
         }
         if (this.pain === true) {
+            this.painSound.play()
             this.Player.textures = this.painAnimation
             this.Player.play()
             this.painLoad = true
@@ -196,7 +205,7 @@ export class Player {
         //đảm bảo chỉ thực hiện 1 hoạt ảnh đánh đấm 
         if (this.punch === true && this.Player.currentFrame === 2 && this.painLoad !== true) {
             this.Player.gotoAndStop(0)
-
+            this.isPunch = false
             this.Player.textures = this.runAnimation
             if (this.moveLeft === true || this.moveRight === true)
                 this.Player.play()

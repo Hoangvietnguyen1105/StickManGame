@@ -1,10 +1,12 @@
 import * as PIXI from 'pixi.js'
 import { App } from '../system/App'
+import { Sound } from "@pixi/sound";
 
 export class bot {
     constructor(player) {
         this.player = player
         this.createBot()
+        this.createSound()
 
     }
     createBot() {
@@ -30,6 +32,13 @@ export class bot {
         this.timePunch = App.config.bot['timePunch']
         this.botSprite.pain = false
         this.botSprite.life = App.config.bot['life']
+    }
+    createSound() {
+        this.punchSound = Sound.from("../../../assets/sounds/1.ogg");
+        this.punchSound.volume = 0.5
+        this.painSound = Sound.from("../../../assets/sounds/pain4.wav")
+        this.painSound.volume = 0.5
+        this.deadSound = Sound.from("../../../assets/sounds/die1.wav")
     }
     followplayer() {
 
@@ -72,6 +81,7 @@ export class bot {
     }
 
     startPain() {
+        this.painSound.play()
         this.botSprite.pain = false
         this.botSprite.textures = this.painAnimation
         this.botSprite.play()
@@ -79,6 +89,7 @@ export class bot {
     }
 
     startPunch() {
+        this.punchSound.play()
         this.botSprite.isPunch = true
         this.botSprite.botPunchLoad = true;
         this.botSprite.textures = this.punchAnimation;
@@ -171,6 +182,9 @@ export class bot {
                 this.moveRight()
             }
         }
+    }
+    stopTicker() {
+        PIXI.Ticker.shared.remove(this.update, this);
     }
 
 }

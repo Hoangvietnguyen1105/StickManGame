@@ -78,10 +78,13 @@ export class Game extends Scene {
             }
 
             if (bot.botSprite.life <= 0) {
+                bot.deadSound.play()
                 bot.destroyed = true;
                 this.container.removeChild(bot.botSprite);
+                bot.stopTicker()
             }
         });
+        this.botList = this.botList.filter(bot => !bot.destroyed);
 
         // Nếu người chơi đã tác động đến ít nhất một bot, reset trạng thái đấm của người chơi
         if (playerPunched) {
@@ -117,9 +120,16 @@ export class Game extends Scene {
     }
 
     checkCollision(objA, objB) {
-        var a = objA.getBounds();
-        var b = objB.getBounds();
-        if (a.right >= b.left && a.left <= b.left) {
+        const a = objA.getBounds();
+        const b = objB.getBounds();
+
+        if (
+            a.x + a.width >= b.x &&  // Right edge of A is overlapping with B
+            a.x <= b.x + b.width &&  // Left edge of A is overlapping with B
+            a.y + a.height >= b.y &&  // Bottom edge of A is overlapping with B
+            a.y <= b.y + b.height &&  // Top edge of A is overlapping with B
+            a.right - 40 >= b.left  // Right edge of A is within 40 pixels of the left edge of B
+        ) {
             return true;
         } else {
             return false;
@@ -127,9 +137,16 @@ export class Game extends Scene {
     }
 
     checkCollision2(objA, objB) {
-        var a = objA.getBounds();
-        var b = objB.getBounds();
-        if (b.right >= a.left && b.left <= a.left) {
+        const a = objA.getBounds();
+        const b = objB.getBounds();
+
+        if (
+            b.x + b.width >= a.x &&  // Right edge of B is overlapping with A
+            b.x <= a.x + a.width &&  // Left edge of B is overlapping with A
+            b.y + b.height >= a.y &&  // Bottom edge of B is overlapping with A
+            b.y <= a.y + a.height &&  // Top edge of B is overlapping with A
+            b.right - 40 >= a.left  // Right edge of B is within 40 pixels of the left edge of A
+        ) {
             return true;
         } else {
             return false;
