@@ -10,12 +10,14 @@ export class Wall extends Container {
         this.createWallSprite()
     }
     createWallSprite() {
+        this.wallList = []
         for (var i = 0; i < App.config.wall.length; i++) {
             for (var j = 0; j < App.config.wall[i]['number']; j++) {
                 var temp = App.sprite('wall')
                 temp.scale.set(0.5)
                 temp.x = App.config.wall[i]['x'] + j * App.config.wall[i]['width']
                 temp.y = App.config.wall[i]['y']
+                this.wallList.push(temp)
                 this.addChild(temp)
             }
 

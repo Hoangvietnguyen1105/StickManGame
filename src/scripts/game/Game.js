@@ -53,6 +53,7 @@ export class Game extends Scene {
         });
         this.checkDame();
         this.checkDame2();
+
     }
 
     checkDame() {
@@ -100,15 +101,20 @@ export class Game extends Scene {
                 bot.botSprite.isPunch = false;
                 if (bot.botSprite.scale.x === -0.5) {
                     if (this.checkCollision(this.player.Player, bot.botSprite)) {
-                        this.player.pain = true;
-                        this.player.scaleD = true;
-                        this.player.scaleA = false;
+                        if (bot.botSprite.y >= this.player.Player.y - App.config.player['height'] / 2 && bot.botSprite.y <= this.player.Player.y + App.config.player['height'] / 2) {
+                            this.player.pain = true;
+                            this.player.scaleD = true;
+                            this.player.scaleA = false;
+                        }
+
                     }
                 } else {
                     if (this.checkCollision2(this.player.Player, bot.botSprite)) {
-                        this.player.pain = true;
-                        this.player.scaleD = false;
-                        this.player.scaleA = false;
+                        if (bot.botSprite.y >= this.player.Player.y - App.config.player['height'] / 2 && bot.botSprite.y <= this.player.Player.y + App.config.player['height'] / 2) {
+                            this.player.pain = true;
+                            this.player.scaleD = false;
+                            this.player.scaleA = true;
+                        }
                     }
                 }
             }
@@ -119,17 +125,11 @@ export class Game extends Scene {
         }
     }
 
-    checkCollision(objA, objB) {
-        const a = objA.getBounds();
-        const b = objB.getBounds();
 
-        if (
-            a.x + a.width >= b.x &&  // Right edge of A is overlapping with B
-            a.x <= b.x + b.width &&  // Left edge of A is overlapping with B
-            a.y + a.height >= b.y &&  // Bottom edge of A is overlapping with B
-            a.y <= b.y + b.height &&  // Top edge of A is overlapping with B
-            a.right - 40 >= b.left  // Right edge of A is within 40 pixels of the left edge of B
-        ) {
+    checkCollision(objA, objB) {
+        var a = objA.getBounds();
+        var b = objB.getBounds();
+        if (a.right >= b.left + 40 && a.left <= b.left) {
             return true;
         } else {
             return false;
@@ -137,19 +137,36 @@ export class Game extends Scene {
     }
 
     checkCollision2(objA, objB) {
-        const a = objA.getBounds();
-        const b = objB.getBounds();
-
-        if (
-            b.x + b.width >= a.x &&  // Right edge of B is overlapping with A
-            b.x <= a.x + a.width &&  // Left edge of B is overlapping with A
-            b.y + b.height >= a.y &&  // Bottom edge of B is overlapping with A
-            b.y <= a.y + a.height &&  // Top edge of B is overlapping with A
-            b.right - 40 >= a.left  // Right edge of B is within 40 pixels of the left edge of A
-        ) {
+        var a = objA.getBounds();
+        var b = objB.getBounds();
+        if (b.right >= a.left + 40 && b.left <= a.left) {
             return true;
         } else {
             return false;
         }
     }
+    checkCollisionPlayerWithWalls(player, wallList) {
+        const playerBounds = player.getBounds();
+
+        for (const wall of wallList) {
+            const wallBounds = wall.getBounds();
+
+            // Check for horizontal collision
+            if (
+                playerBounds.x + playerBounds.width >= wallBounds.x &&  // Right edge of player is overlapping with wall
+                playerBounds.x <= wallBounds.x + wallBounds.width      // Left edge of player is overlapping with wall
+            ) {
+                // Check if player is above the wall
+                if (playerBounds.y + playerBounds.height >= wallBounds.y && playerBounds.y < wallBounds.y) {
+                    // Set player's position to be on top of the wall
+                    player.y = wallBounds.y - playerBounds.height;
+                    return true;  // Collision detected
+                }
+            }
+        }
+
+        // No collision with any walls
+        return false;
+    }
+
 }

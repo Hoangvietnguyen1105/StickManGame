@@ -44,7 +44,7 @@ export class bot {
 
         // const randomNumber = Math.floor(Math.random() * 3) + 1;
 
-        if (this.botSprite.x > this.player.x + 50 && this.botSprite.x < this.player.x + 250 && this.botPunchLoad !== true) {
+        if (this.botSprite.x >= this.player.x + 50 && this.botSprite.x <= this.player.x + 250 && this.botPunchLoad !== true) {
 
             this.botSprite.scale.x = -0.5
             this.botSprite.botRight = false
@@ -53,7 +53,7 @@ export class bot {
             // this.botSprite.botPunchLoad = false // Đặt lại trạng thái của botPunchLoad
 
         }
-        else if (this.botSprite.x < this.player.x - 50 && this.botSprite.x > this.player.x - 250) {
+        else if (this.botSprite.x <= this.player.x - 50 && this.botSprite.x >= this.player.x - 250) {
             this.botSprite.scale.x = 0.5
             this.botSprite.botRight = true
             this.botSprite.botLeft = false
@@ -61,11 +61,12 @@ export class bot {
             // this.botSprite.botPunchLoad = false // Đặt lại trạng thái của botPunchLoad
         }
         //dat trang thai của bot thành punch
-        else if (this.botSprite.x < this.player.x + 50 && this.botSprite.x > this.player.x - 50) {
+        else if (this.botSprite.x <= this.player.x + 50 && this.botSprite.x >= this.player.x - 50) {
             this.botSprite.botRight = false
             this.botSprite.botLeft = false
             this.botSprite.botPunch = true
         } else {
+            this.botSprite.stop()
             this.botSprite.botRight = false
             this.botSprite.botLeft = false
             this.botSprite.botPunch = false
@@ -142,6 +143,7 @@ export class bot {
 
 
     update(deltaTime) {
+
         if (this.timeStay && this.timeStay > 0) {
             this.setAllDown()
             this.timeStay -= deltaTime
