@@ -35,8 +35,8 @@ export const Config = {
         },
         {
             "x": 10,
-            "y": 10,
-            "number": 10,
+            "y": 2,
+            "number": 5,
             "width": 32,
         }
     ]
