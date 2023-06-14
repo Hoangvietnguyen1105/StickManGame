@@ -24,14 +24,17 @@ export class Player {
                 this.moveLeft = true
                 this.Player.scale.x = -0.5
                 this.Player.play()
+
                 break;
             case 38: // Arrow up
                 this.isJump = true
                 break;
             case 39: // Arrow right
+
                 this.moveRight = true
                 this.Player.scale.x = 0.5
                 this.Player.play()
+
                 break;
             case 40: // Arrow down
                 break;
@@ -76,12 +79,13 @@ export class Player {
 
 
     playerMoveLeft() {
-        if (this.Player.x > 0 + App.config.player['realWidth'] / 2) {
+
+        if (this.Player.x > 0 + App.config.player['realWidth'] / 2 && this.inWallLeft !== true) {
             this.Player.x -= App.config.player['speed'];
         }
     }
     playerMoveRight() {
-        if (this.Player.x < App.app.screen.width - App.config.player['realWidth'] / 2)
+        if (this.Player.x < App.app.screen.width - App.config.player['realWidth'] / 2 && this.inWallRight !== true)
             this.Player.x += App.config.player['speed'];
     }
 
@@ -143,12 +147,15 @@ export class Player {
 
     update() {
         if (this.painLoad === true) {
-            if (this.scaleD !== true) {
-                this.Player.x += 10
+            if (this.inWallLeft !== true) {
+                if (this.scaleD !== true) {
+                    this.Player.x += 10
+                }
+                else {
+                    this.Player.x -= 10
+                }
             }
-            else {
-                this.Player.x -= 10
-            }
+
             if (this.Player.currentFrame === 1) {
                 this.Player.stop()
                 this.Player.textures = this.runAnimation
@@ -191,8 +198,7 @@ export class Player {
         }
         //xử lí rơi xuống đất
         if (this.isDown === true) {
-            //this.isJump = false
-            this.isDown = true
+            //this.isDown = true
             this.PlayerDown()
         }
         //xử lũ nhảy

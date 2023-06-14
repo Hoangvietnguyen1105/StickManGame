@@ -41,36 +41,50 @@ export class bot {
         this.deadSound = Sound.from("../../../assets/sounds/die1.wav")
     }
     followplayer() {
+        if (this.botSprite.y > this.player.y - 100 && this.botSprite.y < this.player.y + 100) {
+            if (this.botSprite.x < this.player.x) {
+                this.botSprite.scale.x = 0.5
+            }
+            if (this.botSprite.x > this.player.x) {
+                this.botSprite.scale.x = -0.5
+            }
 
+
+            if (this.botSprite.x >= this.player.x + 50 && this.botSprite.x <= this.player.x + App.config.bot['range'] && this.botPunchLoad !== true) {
+                this.botSprite.scale.x = -0.5
+                this.botSprite.botRight = false
+                this.botSprite.botLeft = true
+                this.botSprite.botPunch = false
+                // this.botSprite.botPunchLoad = false // Đặt lại trạng thái của botPunchLoad
+
+            }
+            else if (this.botSprite.x <= this.player.x - 50 && this.botSprite.x >= this.player.x - App.config.bot['range']) {
+                this.botSprite.scale.x = 0.5
+                this.botSprite.botRight = true
+                this.botSprite.botLeft = false
+                this.botSprite.botPunch = false
+                // this.botSprite.botPunchLoad = false // Đặt lại trạng thái của botPunchLoad
+            }
+            //dat trang thai của bot thành punch
+            else if (this.botSprite.x <= this.player.x + 50 && this.botSprite.x >= this.player.x - 50) {
+                this.botSprite.botRight = false
+                this.botSprite.botLeft = false
+                this.botSprite.botPunch = true
+            } else {
+                this.botSprite.gotoAndStop(0)
+                this.botSprite.botRight = false
+                this.botSprite.botLeft = false
+                this.botSprite.botPunch = false
+            }
+        }
+        else {
+            this.botSprite.gotoAndStop(0)
+            this.botSprite.botRight = false
+            this.botSprite.botLeft = false
+            this.botSprite.botPunch = false
+        }
         // const randomNumber = Math.floor(Math.random() * 3) + 1;
 
-        if (this.botSprite.x >= this.player.x + 50 && this.botSprite.x <= this.player.x + 250 && this.botPunchLoad !== true) {
-
-            this.botSprite.scale.x = -0.5
-            this.botSprite.botRight = false
-            this.botSprite.botLeft = true
-            this.botSprite.botPunch = false
-            // this.botSprite.botPunchLoad = false // Đặt lại trạng thái của botPunchLoad
-
-        }
-        else if (this.botSprite.x <= this.player.x - 50 && this.botSprite.x >= this.player.x - 250) {
-            this.botSprite.scale.x = 0.5
-            this.botSprite.botRight = true
-            this.botSprite.botLeft = false
-            this.botSprite.botPunch = false
-            // this.botSprite.botPunchLoad = false // Đặt lại trạng thái của botPunchLoad
-        }
-        //dat trang thai của bot thành punch
-        else if (this.botSprite.x <= this.player.x + 50 && this.botSprite.x >= this.player.x - 50) {
-            this.botSprite.botRight = false
-            this.botSprite.botLeft = false
-            this.botSprite.botPunch = true
-        } else {
-            this.botSprite.stop()
-            this.botSprite.botRight = false
-            this.botSprite.botLeft = false
-            this.botSprite.botPunch = false
-        }
     }
 
 
@@ -126,19 +140,30 @@ export class bot {
     }
 
     moveLeft() {
-        if (this.botSprite.textures !== this.runAnimation) {
-            this.botSprite.textures = this.runAnimation;
-            this.botSprite.play();
+        if (this.inWallLeft !== true) {
+
+            if (this.botSprite.textures !== this.runAnimation) {
+                this.botSprite.textures = this.runAnimation;
+                this.botSprite.play();
+            }
+            this.botSprite.x -= App.config.bot['speed'] - 1;
         }
-        this.botSprite.x -= App.config.bot['speed'] - 1;
+        else if (this.inWallLeft === true) {
+            this.botSprite.y -= App.config.bot['speed']
+        }
+
     }
 
     moveRight() {
-        if (this.botSprite.textures !== this.runAnimation) {
-            this.botSprite.textures = this.runAnimation;
-            this.botSprite.play();
+        if (this.inWallRight !== true) {
+            if (this.botSprite.textures !== this.runAnimation) {
+                this.botSprite.textures = this.runAnimation;
+                this.botSprite.play();
+            }
+            this.botSprite.x += App.config.bot['speed'] - 1;
+        } else if (this.inWallRight === true) {
+            this.botSprite.y -= App.config.bot['speed'];
         }
-        this.botSprite.x += App.config.bot['speed'] - 1;
     }
     moveDown() {
         this.botSprite.y += App.config.bot['speed']
@@ -176,7 +201,7 @@ export class bot {
             }
             else if (this.botSprite.botPunch === true && this.botSprite.botPunchLoad !== true) {
                 if (this.timePunch < 0) {
-                    if (Math.floor(Math.random() * 10) + 1 === 3 || Math.floor(Math.random() * 10) + 1 === 5) {
+                    if (Math.floor(Math.random() * 50) + 1 === 3) {
                         this.startPunch();
                     }
                 }

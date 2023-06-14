@@ -178,31 +178,78 @@ export class Game extends Scene {
             return false;
         }
     }
+    // kiem tra va cham player voi tuong
     checkPlayerCollisionWithWalls() {
         var inWall = false
         this.wallList.forEach(wall => {
-            if (this.checkCollision(this.player.Player, wall.wallSprite) && this.player.Player.y <= wall.wallSprite.y - App.config.player['height'] / 2 - App.config.wall[0]['height'] / 2) {
-                this.player.isDown = false
-                inWall = true
+            if (this.checkCollision(this.player.Player, wall.wallSprite)) {
+                this.player.inWallLeft = false
+                this.player.inWallRight = false
+                //kiem tra dang dung tren tuong
+                if (this.player.Player.y <= wall.wallSprite.y - App.config.player['height'] / 2 - App.config.wall[0]['height'] / 2) {
+                    this.player.isDown = false
+                    inWall = true
+                }
+                else if (this.player.Player.y >= wall.wallSprite.y + App.config.player['height'] / 2 + App.config.wall[0]['height'] / 2 && this.player.isJump === true) {
+                    this.player.isDown = true
+                    this.player.isJump = false
+                }
+                //kiem tra dang dung ben trai cua tuong
+                else if (wall.wallSprite.x > this.player.Player.x) {
+                    //this.player.moveRight = false
+                    this.player.inWallRight = true
+                    inWall = true
+                }
+                //kiem tra dang dung ben phai tuong
+                else if (wall.wallSprite.x < this.player.Player.x) {
+                    //this.player.moveLeft = false
+                    this.player.inWallLeft = true
+                    inWall = true
+                }
+
+
             }
+
         });
+        // check neu khong cham tuong
         if (inWall === false && this.player.isJump !== true) {
             this.player.isDown = true
+            this.player.inWallRight = false
+            this.player.inWallLeft = false
         }
-
     }
     checkBotCollisionWithWalls() {
         this.botList.forEach(bot => {
+            var jumpOne = false
             var inWall = false;
             this.wallList.forEach(wall => {
-                if (this.checkCollision(bot.botSprite, wall.wallSprite) && bot.botSprite.y <= wall.wallSprite.y - App.config.player['height'] / 2 - App.config.wall[0]['height'] / 2) {
-                    bot.isDown = false;
-                    inWall = true;
+                if (this.checkCollision(bot.botSprite, wall.wallSprite)) {
+                    if (bot.botSprite.y <= wall.wallSprite.y - App.config.player['height'] / 2 - App.config.wall[0]['height'] / 2) {
+                        bot.isDown = false;
+                        inWall = true;
+                    }
+                    else if (bot.botSprite.y >= wall.wallSprite.y + App.config.player['height'] / 2 + App.config.wall[0]['height'] / 2 && bot.isJump !== true) {
+                        bot.isDown = true;
+                        bot.isJump = false;
+                    }
+                    //kiem tra dang dung ben trai cua tuong
+                    else if (wall.wallSprite.x > bot.botSprite.x) {
+                        bot.inWallRight = true;
+                        inWall = true;
+                    }
+                    //kiem tra dang dung ben phai tuong
+                    else if (wall.wallSprite.x < bot.botSprite.x) {
+                        bot.inWallLeft = true;
+                        inWall = true;
+                    }
                 }
             });
             if (!inWall && !bot.isJump) {
                 bot.isDown = true;
+                bot.inWallRight = false;
+                bot.inWallLeft = false;
             }
+
         });
     }
 

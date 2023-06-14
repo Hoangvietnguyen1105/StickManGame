@@ -7,7 +7,7 @@ export const Config = {
     player: {
         "height": 100,
         "width": 100,
-        "x": 150,
+        "x": 1000,
         "y": 700,
         "animatedSpeed": 0.15,
         "speed": 5,
@@ -17,14 +17,15 @@ export const Config = {
     bot: {
         "height": 100,
         "width": 100,
-        "x": 1525,
+        "x": 1500,
         "y": 700,
         "animatedSpeed": 0.15,
         "speed": 5,
         "realWidth": 50,
         "jumpHight": 90,
         "timePunch": 500,
-        "life": 5
+        "life": 5,
+        "range": 250
     },
     wall: [
         {
@@ -35,10 +36,31 @@ export const Config = {
             "height": 30
         },
         {
-            "x": 170,
+            "x": 350,
             "y": 700,
             "number": 50,
-            "width": 12,
+            "width": 4,
+            "height": 30
+        },
+        {
+            "x": 650,
+            "y": 620,
+            "number": 50,
+            "width": 4,
+            "height": 30
+        },
+        {
+            "x": 850,
+            "y": 540,
+            "number": 50,
+            "width": 4,
+            "height": 30
+        },
+        {
+            "x": 550,
+            "y": 460,
+            "number": 50,
+            "width": 4,
             "height": 30
         },
 
