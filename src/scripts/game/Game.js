@@ -40,7 +40,6 @@ export class Game extends Scene {
     }
 
     createWall() {
-        console.log('abc')
 
         this.wallList = []
         for (var i = 0; i < App.config.wall.length; i++) {
@@ -63,6 +62,8 @@ export class Game extends Scene {
         });
         this.checkDamePlayerToBot();
         this.checkDameBotToPlayer();
+        this.checkPlayerCollisionWithWalls()
+        this.checkBotCollisionWithWalls()
     }
 
 
@@ -88,7 +89,7 @@ export class Game extends Scene {
                 }
             }
 
-            if (bot.botSprite.life <= 0) {
+            if (bot.botSprite.life <= 0 || bot.botSprite.y >= 2000) {
                 bot.deadSound.play()
                 bot.destroyed = true;
                 this.container.removeChild(bot.botSprite);
@@ -155,10 +156,15 @@ export class Game extends Scene {
             return false;
         }
     }
-    checkCollision(objA, objB) {
+    checkCollision(objA, objB, offsetX = App.config.player['realWidth'] / 2, offsetY = 0) {
         const boundsA = objA.getBounds();
         const boundsB = objB.getBounds();
 
+        // Add the offset values to the bounds of objA
+        boundsA.x += offsetX;
+        boundsA.width -= offsetX * 2;
+
+        // Perform the collision check
         if (
             boundsA.x + boundsA.width >= boundsB.x &&
             boundsB.x + boundsB.width >= boundsA.x &&
@@ -172,6 +178,34 @@ export class Game extends Scene {
             return false;
         }
     }
+    checkPlayerCollisionWithWalls() {
+        var inWall = false
+        this.wallList.forEach(wall => {
+            if (this.checkCollision(this.player.Player, wall.wallSprite) && this.player.Player.y <= wall.wallSprite.y - App.config.player['height'] / 2 - App.config.wall[0]['height'] / 2) {
+                this.player.isDown = false
+                inWall = true
+            }
+        });
+        if (inWall === false && this.player.isJump !== true) {
+            this.player.isDown = true
+        }
+
+    }
+    checkBotCollisionWithWalls() {
+        this.botList.forEach(bot => {
+            var inWall = false;
+            this.wallList.forEach(wall => {
+                if (this.checkCollision(bot.botSprite, wall.wallSprite) && bot.botSprite.y <= wall.wallSprite.y - App.config.player['height'] / 2 - App.config.wall[0]['height'] / 2) {
+                    bot.isDown = false;
+                    inWall = true;
+                }
+            });
+            if (!inWall && !bot.isJump) {
+                bot.isDown = true;
+            }
+        });
+    }
+
 
 
 

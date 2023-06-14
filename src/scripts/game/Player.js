@@ -63,7 +63,6 @@ export class Player {
             case 39: // Arrow right
                 this.moveRight = false
                 if (this.punch === false && this.painLoad === false) {
-                    console.log('alo')
                     this.Player.gotoAndStop(0)
                 }
                 break;
@@ -182,18 +181,22 @@ export class Player {
         }
 
 
-        if (this.jumpHight === App.config.player['jumpHight'] && this.painLoad !== true) {
-            this.isDown = false
-        }
-        //xử lí rơi xuống đất
-        if (this.jumpHight <= 0 || this.isDown === true && this.painLoad !== true) {
+        // if (this.jumpHight === App.config.player['jumpHight'] && this.painLoad !== true) {
+        //     this.isDown = false
+        // }
+        if (this.jumpHight <= 0) {
             this.isJump = false
             this.isDown = true
+            this.jumpHight = App.config.player['jumpHight']
+        }
+        //xử lí rơi xuống đất
+        if (this.isDown === true) {
+            //this.isJump = false
+            this.isDown = true
             this.PlayerDown()
-            this.jumpHight += App.config.player['speed']
         }
         //xử lũ nhảy
-        if (this.isJump && this.isJump === true && this.painLoad !== true) {
+        if (this.isDown !== true && this.isJump === true && this.painLoad !== true) {
             this.PlayerJump()
             this.jumpHight -= App.config.player['speed']
         }

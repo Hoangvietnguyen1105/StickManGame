@@ -140,10 +140,15 @@ export class bot {
         }
         this.botSprite.x += App.config.bot['speed'] - 1;
     }
+    moveDown() {
+        this.botSprite.y += App.config.bot['speed']
+    }
 
 
     update(deltaTime) {
-
+        if (this.isDown !== false) {
+            this.moveDown()
+        }
         if (this.timeStay && this.timeStay > 0) {
             this.setAllDown()
             this.timeStay -= deltaTime

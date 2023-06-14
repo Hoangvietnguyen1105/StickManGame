@@ -11,6 +11,7 @@ export class Wall extends Container {
     }
     createWallSprite() {
         this.wallSprite = App.sprite('wall')
+        this.wallSprite.anchor.set(0.5)
         this.wallSprite.scale.set(0.5)
 
     }

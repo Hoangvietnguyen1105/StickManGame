@@ -7,18 +7,18 @@ export const Config = {
     player: {
         "height": 100,
         "width": 100,
-        "x": 25,
-        "y": 800,
+        "x": 150,
+        "y": 700,
         "animatedSpeed": 0.15,
         "speed": 5,
-        "realWidth": 50,
+        "realWidth": 60,
         "jumpHight": 90,
     },
     bot: {
         "height": 100,
         "width": 100,
-        "x": 525,
-        "y": 800,
+        "x": 1525,
+        "y": 700,
         "animatedSpeed": 0.15,
         "speed": 5,
         "realWidth": 50,
@@ -28,16 +28,19 @@ export const Config = {
     },
     wall: [
         {
-            "x": 100,
+            "x": 70,
             "y": 780,
-            "number": 5,
+            "number": 50,
             "width": 32,
+            "height": 30
         },
         {
-            "x": 10,
-            "y": 2,
-            "number": 5,
-            "width": 32,
-        }
+            "x": 170,
+            "y": 700,
+            "number": 50,
+            "width": 12,
+            "height": 30
+        },
+
     ]
 };
