@@ -7,7 +7,7 @@ export const Config = {
     player: {
         "height": 100,
         "width": 100,
-        "x": 1000,
+        "x": 200,
         "y": 700,
         "animatedSpeed": 0.15,
         "speed": 5,

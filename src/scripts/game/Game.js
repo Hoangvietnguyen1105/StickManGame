@@ -3,6 +3,7 @@ import { Scene } from "../system/Scene";
 import { Player } from "./Player";
 import { bot } from "./bot";
 import { Wall } from "./Wall";
+import { camera } from "./camera";
 import * as PIXI from 'pixi.js'
 
 export class Game extends Scene {
@@ -11,6 +12,7 @@ export class Game extends Scene {
         this.createPlayer();
         this.createBot();
         this.createWall()
+        this.camera = new camera(this.player, this.wallList, this.botList)
         App.app.ticker.add((delta) => {
             const deltaTime = delta / PIXI.settings.TARGET_FPMS;
             this.follow(deltaTime); // Truyền delta time vào phương thức follow
@@ -55,6 +57,8 @@ export class Game extends Scene {
     }
 
     follow(deltaTime) {
+
+        this.camera._initCamera()
         this.botList.forEach(bot => {
             if (!bot.destroyed) {
                 bot.update(deltaTime);
