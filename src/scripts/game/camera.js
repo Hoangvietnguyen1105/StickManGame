@@ -6,50 +6,63 @@ import { Wall } from "./Wall";
 import * as PIXI from 'pixi.js'
 
 export class camera {
-    constructor(player, wallList, botList) {
+    constructor(player, wallList, botList, heartListItem) {
         this.player = player
         this.wallList = wallList
         this.botList = botList
+        this.heartListItem = heartListItem
     }
     _initCamera() {
         if (this.player.Player.x > window.innerWidth / 2) {
-            this.player.Player.x -= 5
+            this.player.Player.x -= App.config.player['speed']
 
             this.wallList.forEach(wall => {
-                wall.wallSprite.x -= 5
+                wall.wallSprite.x -= App.config.player['speed']
             });
             this.botList.forEach(bot => {
-                bot.botSprite.x -= 5
+                bot.botSprite.x -= App.config.player['speed']
+            });
+            this.heartListItem.forEach(heart => {
+                heart.heartSprite.x -= App.config.player['speed']
             });
         }
         if (this.player.Player.x < window.innerWidth / 2) {
-            this.player.Player.x += 5
+            this.player.Player.x += App.config.player['speed']
 
             this.wallList.forEach(wall => {
-                wall.wallSprite.x += 5
+                wall.wallSprite.x += App.config.player['speed']
             });
             this.botList.forEach(bot => {
-                bot.botSprite.x += 5
+                bot.botSprite.x += App.config.player['speed']
+            });
+            this.heartListItem.forEach(heart => {
+                heart.heartSprite.x += App.config.player['speed']
             });
         }
         if (this.player.Player.y > window.innerHeight / 2) {
-            this.player.Player.y -= 5
+            this.player.Player.y -= App.config.player['speed']
 
             this.wallList.forEach(wall => {
-                wall.wallSprite.y -= 5
+                wall.wallSprite.y -= App.config.player['speed']
             });
             this.botList.forEach(bot => {
-                bot.botSprite.y -= 5
+                bot.botSprite.y -= App.config.player['speed']
+            });
+            this.heartListItem.forEach(heart => {
+                heart.heartSprite.y -= App.config.player['speed']
             });
         }
         if (this.player.Player.y < window.innerHeight / 2) {
-            this.player.Player.y += 5
+            this.player.Player.y += App.config.player['speed']
 
             this.wallList.forEach(wall => {
-                wall.wallSprite.y += 5
+                wall.wallSprite.y += App.config.player['speed']
             });
             this.botList.forEach(bot => {
-                bot.botSprite.y += 5
+                bot.botSprite.y += App.config.player['speed']
+            });
+            this.heartListItem.forEach(heart => {
+                heart.heartSprite.y += App.config.player['speed']
             });
         }
     }

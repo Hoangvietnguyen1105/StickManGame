@@ -31,6 +31,7 @@ export class bot {
         this.timePunch = App.config.bot['timePunch']
         this.botSprite.pain = false
         this.botSprite.life = App.config.bot['life']
+        this.botSprite.tint = 0x070a06;
     }
     createSound() {
         this.punchSound = Sound.from("../../../assets/sounds/1.ogg");
@@ -40,7 +41,7 @@ export class bot {
         this.deadSound = Sound.from("../../../assets/sounds/die1.wav")
     }
     followplayer() {
-        if (this.botSprite.y > this.player.y - 100 && this.botSprite.y < this.player.y + 100) {
+        if (this.botSprite.y > this.player.y - 200 && this.botSprite.y < this.player.y + 200) {
             if (this.botSprite.x < this.player.x) {
                 this.botSprite.scale.x = 0.5
             }
@@ -145,7 +146,7 @@ export class bot {
                 this.botSprite.textures = this.runAnimation;
                 this.botSprite.play();
             }
-            this.botSprite.x -= App.config.bot['speed'] - 1;
+            this.botSprite.x -= App.config.bot['speed'];
         }
         else if (this.inWallLeft === true) {
             this.botSprite.y -= App.config.bot['speed']
@@ -159,7 +160,7 @@ export class bot {
                 this.botSprite.textures = this.runAnimation;
                 this.botSprite.play();
             }
-            this.botSprite.x += App.config.bot['speed'] - 1;
+            this.botSprite.x += App.config.bot['speed'];
         } else if (this.inWallRight === true) {
             this.botSprite.y -= App.config.bot['speed'];
         }
@@ -186,7 +187,9 @@ export class bot {
             }
             //hàm này check xem hành động pain đã xảy ra chưa, nếu xảy ra xong rồi mới tới hành động khác 
             else if (this.botSprite.painLoad === true) {
-                this.painBack()
+                if (this.inWallLeft !== true && this.inWallRight !== true) {
+                    this.painBack()
+                }
                 if (this.botSprite.currentFrame === 1) {
                     this.loadPain()
                 }
@@ -215,7 +218,7 @@ export class bot {
         }
     }
     stopTicker() {
-        PIXI.Ticker.shared.remove(this.update, this);
+        App.app.ticker.remove(this.update, this);
     }
 
 }

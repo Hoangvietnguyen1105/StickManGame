@@ -80,12 +80,12 @@ export class Player {
 
     playerMoveLeft() {
 
-        if (this.Player.x > 0 + App.config.player['realWidth'] / 2 && this.inWallLeft !== true) {
+        if (this.inWallLeft !== true) {
             this.Player.x -= App.config.player['speed'];
         }
     }
     playerMoveRight() {
-        if (this.Player.x < App.app.screen.width - App.config.player['realWidth'] / 2 && this.inWallRight !== true)
+        if (this.inWallRight !== true)
             this.Player.x += App.config.player['speed'];
     }
 
@@ -126,7 +126,8 @@ export class Player {
         this.checkPunch = true
         this.jumpHight = App.config.player['jumpHight']
         this.painLoad = false
-        this.life = 1
+        this.life = 10
+        this.timeDown = 0
     }
     swapAnimation() {
         this.Player.textures = this.punchAnimation
@@ -159,6 +160,7 @@ export class Player {
             }
 
             if (this.Player.currentFrame === 1) {
+                this.heartDown = true
                 this.life--
                 this.Player.stop()
                 this.Player.textures = this.runAnimation
@@ -226,7 +228,7 @@ export class Player {
 
     }
     stopTicker() {
-        PIXI.Ticker.shared.remove(this.update, this);
+        App.app.ticker.remove(this.update, this);
     }
 
 

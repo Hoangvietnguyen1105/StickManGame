@@ -104,6 +104,15 @@ export const manifest = {
                     srcs: 'assets/images/tile.png'
                 }
             ]
+        },
+        {
+            name: 'heart',
+            assets: [
+                {
+                    name: 'heart',
+                    srcs: 'assets/images/heart.png'
+                }
+            ]
         }
 
 

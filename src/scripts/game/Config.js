@@ -5,6 +5,9 @@ export const Config = {
         "Game": Game,
         "GameOver": gameOver
     },
+    status: {
+        "play": "start",
+    },
     player: {
         "height": 100,
         "width": 100,
@@ -21,12 +24,12 @@ export const Config = {
         "x": 1500,
         "y": 700,
         "animatedSpeed": 0.15,
-        "speed": 5,
+        "speed": 2.1,
         "realWidth": 50,
         "jumpHight": 90,
         "timePunch": 500,
         "life": 5,
-        "range": 250
+        "range": 450
     },
     botLocation: [
         {
@@ -37,6 +40,10 @@ export const Config = {
             "x": 1100,
             "y": 700,
         },
+        {
+            "x": 2250,
+            "y": 340
+        }
     ],
     wall: [
         {
@@ -81,6 +88,35 @@ export const Config = {
             "width": 4,
             "height": 30
         },
+        {
+            "x": 1950,
+            "y": 700,
+            "number": 5,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 2050,
+            "y": 620,
+            "number": 5,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 2150,
+            "y": 540,
+            "number": 50,
+            "width": 32,
+            "height": 30
+        },
 
-    ]
+    ],
+    heart: [
+        {
+            "x": 120,
+            "y": 700
+        }
+    ],
+
+
 };
