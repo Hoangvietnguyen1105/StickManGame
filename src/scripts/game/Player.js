@@ -102,6 +102,7 @@ export class Player {
         this.punchSound.volume = 0.5
         this.painSound = Sound.from("../../../assets/sounds/pain1.wav")
         this.painSound.volume = 0.5
+        this.gameOverSound = Sound.from("../../../assets/sounds/gameOver.wav")
     }
 
 
@@ -120,12 +121,13 @@ export class Player {
 
         this.Player.animationSpeed = App.config.player['animatedSpeed']
         this.Player.anchor.set(0.5)
+
         this.punch = false
         this.checkPunch = true
         this.jumpHight = App.config.player['jumpHight']
         this.painLoad = false
+        this.life = 1
     }
-
     swapAnimation() {
         this.Player.textures = this.punchAnimation
     }
@@ -147,7 +149,7 @@ export class Player {
 
     update() {
         if (this.painLoad === true) {
-            if (this.inWallLeft !== true) {
+            if (this.inWallLeft !== true && this.inWallRight !== true) {
                 if (this.scaleD !== true) {
                     this.Player.x += 10
                 }
@@ -157,6 +159,7 @@ export class Player {
             }
 
             if (this.Player.currentFrame === 1) {
+                this.life--
                 this.Player.stop()
                 this.Player.textures = this.runAnimation
                 this.painLoad = false
@@ -221,6 +224,9 @@ export class Player {
             this.punch = false
         }
 
+    }
+    stopTicker() {
+        PIXI.Ticker.shared.remove(this.update, this);
     }
 
 

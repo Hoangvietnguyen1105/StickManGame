@@ -48,6 +48,10 @@ class Application {
     start() {
         this.scenes.start("Game");
     }
+    Over() {
+        console.log('abc')
+        this.scenes.start("GameOver")
+    }
 }
 
 export const App = new Application();

@@ -5,6 +5,7 @@ import { bot } from "./bot";
 import { Wall } from "./Wall";
 import { camera } from "./camera";
 import * as PIXI from 'pixi.js'
+import { Sound } from "@pixi/sound";
 
 export class Game extends Scene {
     create() {
@@ -15,7 +16,7 @@ export class Game extends Scene {
         this.camera = new camera(this.player, this.wallList, this.botList)
         App.app.ticker.add((delta) => {
             const deltaTime = delta / PIXI.settings.TARGET_FPMS;
-            this.follow(deltaTime); // Truyền delta time vào phương thức follow
+            this.update(deltaTime); // Truyền delta time vào phương thức follow
         });
     }
 
@@ -32,10 +33,13 @@ export class Game extends Scene {
     }
 
     createBot() {
+
         this.botList = [];
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < App.config.botLocation.length; i++) {
+            console.log(App.config.botLocation[i]['x'])
             var botTmp = new bot(this.player.Player);
-            botTmp.botSprite.x += i * 40;
+            botTmp.botSprite.x = App.config.botLocation[i]['x'];
+            botTmp.botSprite.y = App.config.botLocation[i]['y']
             this.container.addChild(botTmp.botSprite);
             this.botList.push(botTmp);
         }
@@ -56,8 +60,8 @@ export class Game extends Scene {
         }
     }
 
-    follow(deltaTime) {
-
+    update(deltaTime) {
+        console.log('loop')
         this.camera._initCamera()
         this.botList.forEach(bot => {
             if (!bot.destroyed) {
@@ -92,6 +96,7 @@ export class Game extends Scene {
                     }
                 }
             }
+
 
             if (bot.botSprite.life <= 0 || bot.botSprite.y >= 2000) {
                 bot.deadSound.play()
@@ -136,7 +141,10 @@ export class Game extends Scene {
         });
 
         if (this.player.life <= 0) {
+            this.player.life = 1000
             this.container.removeChild(this.player.Player);
+            this.player.gameOverSound.play()
+            this.player.stopTicker()
         }
     }
 
@@ -256,6 +264,7 @@ export class Game extends Scene {
 
         });
     }
+
 
 
 

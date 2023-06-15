@@ -18,8 +18,7 @@ export class bot {
         this.botSprite.width = App.config.bot['width']
         this.botSprite.height = App.config.bot['height']
         this.botSprite.scale.x = 0.5
-        this.botSprite.x = App.config.bot['x']
-        this.botSprite.y = App.config.bot['y']
+
 
         this.botSprite.animationSpeed = App.config.bot['animatedSpeed']
         this.botSprite.anchor.set(0.5)
@@ -201,7 +200,7 @@ export class bot {
             }
             else if (this.botSprite.botPunch === true && this.botSprite.botPunchLoad !== true) {
                 if (this.timePunch < 0) {
-                    if (Math.floor(Math.random() * 50) + 1 === 3) {
+                    if (Math.floor(Math.random() * 40) + 1 === 3) {
                         this.startPunch();
                     }
                 }

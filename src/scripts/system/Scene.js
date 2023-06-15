@@ -10,7 +10,10 @@ export class Scene {
 
     create() { }
     update() { }
-    destroy() { }
+    destroy() {
+
+    }
+
 
     remove() {
         App.app.ticker.remove(this.update, this);

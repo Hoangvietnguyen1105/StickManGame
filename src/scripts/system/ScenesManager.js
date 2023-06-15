@@ -9,11 +9,9 @@ export class ScenesManager {
     }
 
     start(scene) {
-
         if (this.scene) {
             this.scene.remove();
         }
-
         this.scene = new App.config.scenes[scene]();
         this.container.addChild(this.scene.container);
     }
