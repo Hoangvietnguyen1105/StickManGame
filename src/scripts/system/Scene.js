@@ -1,8 +1,9 @@
 import * as PIXI from "pixi.js";
 import { App } from "./App";
 
-export class Scene {
+export class Scene extends PIXI.Container {
     constructor() {
+        super()
         this.container = new PIXI.Container();
         this.create();
         App.app.ticker.add(this.update, this);
@@ -10,10 +11,7 @@ export class Scene {
 
     create() { }
     update() { }
-    destroy() {
-
-    }
-
+    destroy() { }
 
     remove() {
         App.app.ticker.remove(this.update, this);

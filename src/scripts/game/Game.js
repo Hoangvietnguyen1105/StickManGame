@@ -61,7 +61,6 @@ export class Game extends Scene {
     }
 
     update(deltaTime) {
-        console.log('loop')
         this.camera._initCamera()
         this.botList.forEach(bot => {
             if (!bot.destroyed) {
@@ -142,6 +141,7 @@ export class Game extends Scene {
 
         if (this.player.life <= 0) {
             this.player.life = 1000
+            App.Over()
             this.container.removeChild(this.player.Player);
             this.player.gameOverSound.play()
             this.player.stopTicker()
@@ -263,6 +263,25 @@ export class Game extends Scene {
             }
 
         });
+    }
+    destroy() {
+        // Xoá các bot và tường
+        this.botList.forEach(bot => {
+            bot.stopTicker();
+            this.container.removeChild(bot.botSprite);
+        });
+        this.botList = [];
+
+        this.wallList.forEach(wall => {
+            this.container.removeChild(wall.wallSprite);
+        });
+        this.wallList = [];
+
+        // Xoá người chơi
+        this.container.removeChild(this.player.Player);
+
+        // Dừng ticker
+        App.app.ticker.remove(this.update, this);
     }
 
 
