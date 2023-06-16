@@ -9,8 +9,8 @@ export const Config = {
     player: {
         "height": 100,
         "width": 100,
-        "x": 70,
-        "y": 700,
+        "x": -620,
+        "y": -300,
         "animatedSpeed": 0.15,
         "speed": 5,
         "realWidth": 60,
@@ -41,9 +41,31 @@ export const Config = {
         {
             "x": 2250,
             "y": 340
-        }
+        },
+        {
+            "x": 2400,
+            "y": 100
+        },
+        {
+            "x": 1300,
+            "y": 100,
+
+        },
+        {
+            "x": -340,
+            "y": 100,
+
+        },
+        {
+            "x": -120,
+            "y": -700,
+
+        },
+
+
     ],
     wall: [
+
         {
             "x": 70,
             "y": 780,
@@ -107,6 +129,123 @@ export const Config = {
             "width": 32,
             "height": 30
         },
+        {
+            "x": 3850,
+            "y": 700,
+            "number": 10,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 4250,
+            "y": 620,
+            "number": 10,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 4550,
+            "y": 540,
+            "number": 10,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 4150,
+            "y": 460,
+            "number": 10,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 4550,
+            "y": 380,
+            "number": 10,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 4130,
+            "y": 300,
+            "number": 10,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": 1800,
+            "y": 220,
+            "number": 70,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -640,
+            "y": 220,
+            "number": 70,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -800,
+            "y": 160,
+            "number": 1,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -960,
+            "y": 100,
+            "number": 1,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -1120,
+            "y": 40,
+            "number": 1,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -1160,
+            "y": -20,
+            "number": 1,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -1200,
+            "y": -80,
+            "number": 1,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -1040,
+            "y": -120,
+            "number": 1,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -880,
+            "y": -160,
+            "number": 1,
+            "width": 32,
+            "height": 30
+        },
+        {
+            "x": -720,
+            "y": -200,
+            "number": 50,
+            "width": 32,
+            "height": 30
+        },
+
+
+
+
+
 
     ],
     heart: [
@@ -131,6 +270,16 @@ export const Config = {
         {
             "x": 1500,
             "y": 600
+        },
+        {
+            "x": 2500,
+            "y": 180,
+
+        },
+        {
+            "x": 1300,
+            "y": 100,
+
         },
     ],
 

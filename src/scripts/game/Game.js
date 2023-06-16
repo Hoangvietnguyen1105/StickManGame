@@ -8,14 +8,16 @@ import * as PIXI from 'pixi.js'
 import { Sound } from "@pixi/sound";
 import { Heart } from "./heart";
 import { Kame } from './kamezoko';
+import { collision } from "./collision"
 export class Game extends Scene {
     create() {
         this.run = true
         this.kamezoko = null
         this.createBackground();
+        this.createWall()
         this.createPlayer();
         this.createBot();
-        this.createWall()
+
         this.createHeart()
         this.createShuriken()
         this.camera = new camera(this.player, this.wallList, this.botList, this.heartListItem, this.shurikenListItem)
@@ -104,8 +106,6 @@ export class Game extends Scene {
 
 
     update(deltaTime) {
-
-
         // cài đặt rơi quá lâu sẽ chết
 
         if (App.config.status['play'] === 'start') {
@@ -190,7 +190,7 @@ export class Game extends Scene {
         this.botList.forEach(bot => {
             if (!bot.destroyed && this.player.isPunch === true) {
                 if (this.player.Player.scale.x === 0.5) {
-                    if (this.checkCollisionRight(this.player.Player, bot.botSprite)) {
+                    if (collision.checkCollisionRight(this.player.Player, bot.botSprite)) {
                         if (this.player.Player.y > bot.botSprite.y - App.config.player['height'] / 2 && this.player.Player.y < bot.botSprite.y + App.config.player['height'] / 2) {
                             bot.botSprite.pain = true;
                             bot.scaleD = true;
@@ -200,7 +200,7 @@ export class Game extends Scene {
                         // Đánh dấu là người chơi đã tác động đến bot
                     }
                 } else {
-                    if (this.checkCollisionLeft(this.player.Player, bot.botSprite)) {
+                    if (collision.checkCollisionLeft(this.player.Player, bot.botSprite)) {
                         if (this.player.Player.y > bot.botSprite.y - App.config.player['height'] / 2 && this.player.Player.y < bot.botSprite.y + App.config.player['height'] / 2) {
                             bot.botSprite.pain = true;
                             bot.scaleD = false;
@@ -235,7 +235,7 @@ export class Game extends Scene {
             if (!bot.destroyed && bot.botSprite.isPunch === true) {
                 bot.botSprite.isPunch = false;
                 if (bot.botSprite.scale.x === -0.5) {
-                    if (this.checkCollisionRight(this.player.Player, bot.botSprite)) {
+                    if (collision.checkCollisionRight(this.player.Player, bot.botSprite)) {
                         if (bot.botSprite.y >= this.player.Player.y - App.config.player['height'] / 2 && bot.botSprite.y <= this.player.Player.y + App.config.player['height'] / 2) {
                             this.player.pain = true;
                             this.player.scaleD = true;
@@ -244,7 +244,7 @@ export class Game extends Scene {
 
                     }
                 } else {
-                    if (this.checkCollisionLeft(this.player.Player, bot.botSprite)) {
+                    if (collision.checkCollisionLeft(this.player.Player, bot.botSprite)) {
                         if (bot.botSprite.y >= this.player.Player.y - App.config.player['height'] / 2 && bot.botSprite.y <= this.player.Player.y + App.config.player['height'] / 2) {
                             this.player.pain = true;
                             this.player.scaleD = false;
@@ -268,59 +268,11 @@ export class Game extends Scene {
     }
 
 
-    checkCollisionRight(objA, objB) {
-        var a = objA.getBounds();
-        var b = objB.getBounds();
-        if (a.right >= b.left + 40 && a.left <= b.left) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    checkCollisionLeft(objA, objB) {
-        var a = objA.getBounds();
-        var b = objB.getBounds();
-        if (b.right >= a.left + 40 && b.left <= a.left) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    checkCollision(objA, objB, offsetX = App.config.player['realWidth'] / 2, offsetY = 0) {
-        let boundsA
-        let boundsB
-        if (objA.getBounds() && objB.getBounds()) {
-            boundsA = objA.getBounds();
-            boundsB = objB.getBounds();
-        }
-
-
-
-
-        // Add the offset values to the bounds of objA
-        boundsA.x += offsetX;
-        boundsA.width -= offsetX * 2;
-
-        // Perform the collision check
-        if (
-            boundsA.x + boundsA.width >= boundsB.x &&
-            boundsB.x + boundsB.width >= boundsA.x &&
-            boundsA.y + boundsA.height >= boundsB.y &&
-            boundsB.y + boundsB.height >= boundsA.y
-        ) {
-            // Collision detected
-            return true;
-        } else {
-            // No collision
-            return false;
-        }
-    }
     // kiem tra va cham player voi tuong
     checkPlayerCollisionWithWalls() {
         var inWall = false
         this.wallList.forEach(wall => {
-            if (this.checkCollision(this.player.Player, wall.wallSprite)) {
+            if (collision.checkCollision(this.player.Player, wall.wallSprite)) {
                 this.player.inWallLeft = false
                 this.player.inWallRight = false
                 //kiem tra dang dung tren tuong
@@ -361,7 +313,7 @@ export class Game extends Scene {
             var jumpOne = false
             var inWall = false;
             this.wallList.forEach(wall => {
-                if (this.checkCollision(bot.botSprite, wall.wallSprite)) {
+                if (collision.checkCollision(bot.botSprite, wall.wallSprite)) {
                     if (bot.botSprite.y <= wall.wallSprite.y - App.config.player['height'] / 2 - App.config.wall[0]['height'] / 2) {
                         bot.isDown = false;
                         inWall = true;
@@ -397,7 +349,7 @@ export class Game extends Scene {
         if (this.heartListItem.length > 0) {
             this.heartListItem.forEach((heart, index) => {
                 if (heart.heartSprite !== null && this.player.Player !== null) {
-                    if (this.checkCollision(this.player.Player, heart.heartSprite)) {
+                    if (collision.checkCollision(this.player.Player, heart.heartSprite)) {
                         this.container.addChild(heart.heartSprite);
                         this.heartListItem.splice(index, 1);
                         this.heartList.push(heart)
@@ -414,7 +366,7 @@ export class Game extends Scene {
         }
 
         this.shurikenListItem.forEach((shuriken, index) => {
-            if (this.checkCollision(this.player.Player, shuriken.kameSprite)) {
+            if (collision.checkCollision(this.player.Player, shuriken.kameSprite)) {
                 this.container.addChild(shuriken.kameSprite);
                 this.shurikenListItem.splice(index, 1);
                 this.shurikenList.push(shuriken)
@@ -430,7 +382,7 @@ export class Game extends Scene {
     }
     checkCollisionKameWithBot() {
         this.botList.forEach(bot => {
-            if (this.checkCollision(this.kamezoko.kameSprite, bot.botSprite)) {
+            if (collision.checkCollision(this.kamezoko.kameSprite, bot.botSprite)) {
                 bot.botSprite.pain = true;
                 if (this.player.Player.scale.x === 0.5) {
                     bot.scaleD = true;
