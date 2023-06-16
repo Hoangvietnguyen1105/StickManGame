@@ -49,6 +49,14 @@ export class Player {
                     }
                 }
                 break;
+            case 86:
+                if (this.phiTieu > 0) {
+                    this.phiTieu--
+                    this.kame = true
+                    this.kameLoad = 100
+                }
+                break
+
 
         }
     }
@@ -73,6 +81,9 @@ export class Player {
                 break;
             case 32:
                 break;
+            case 86:
+                this.kame = false
+                break;
 
         }
     }
@@ -81,12 +92,22 @@ export class Player {
     playerMoveLeft() {
 
         if (this.inWallLeft !== true) {
+            if (this.Player.textures !== this.runAnimation) {
+                this.Player.textures = this.runAnimation
+                this.Player.play()
+            }
             this.Player.x -= App.config.player['speed'];
         }
     }
     playerMoveRight() {
-        if (this.inWallRight !== true)
+        if (this.inWallRight !== true) {
+            if (this.Player.textures !== this.runAnimation) {
+                this.Player.textures = this.runAnimation
+                this.Player.play()
+            }
             this.Player.x += App.config.player['speed'];
+        }
+
     }
 
     PlayerJump() {
@@ -111,6 +132,7 @@ export class Player {
         this.punchAnimation = App.ListOfTexture('punch') // khai bao List texture punch
         this.runAnimation = App.ListOfTexture('run') // khai bao List texture run
         this.painAnimation = App.ListOfTexture('pain')
+        this.kameAnimation = App.ListOfTexture('kame')
 
         this.Player = App.animatedSprite('run') // gan animated bang run
         this.Player.width = App.config.player['width']
@@ -118,7 +140,6 @@ export class Player {
         this.Player.scale.x = 0.5
         this.Player.x = App.config.player['x']
         this.Player.y = App.config.player['y']
-
         this.Player.animationSpeed = App.config.player['animatedSpeed']
         this.Player.anchor.set(0.5)
 
@@ -127,7 +148,10 @@ export class Player {
         this.jumpHight = App.config.player['jumpHight']
         this.painLoad = false
         this.life = 10
+        this.kame = false
         this.timeDown = 0
+        this.phiTieu = 3
+
     }
     swapAnimation() {
         this.Player.textures = this.punchAnimation
@@ -144,11 +168,17 @@ export class Player {
         });
     }
 
+    createKame() {
+        this.kamezoko = new Kame()
+        this.kamezoko.kameSprite.x = this.Player.x
+        this.kamezoko.kameSprite.y = this.Player.y
+
+    }
 
 
 
+    update(deltaTime) {
 
-    update() {
         if (this.painLoad === true) {
             if (this.inWallLeft !== true && this.inWallRight !== true) {
                 if (this.scaleD !== true) {
@@ -225,11 +255,11 @@ export class Player {
                 this.Player.play()
             this.punch = false
         }
-
     }
     stopTicker() {
         App.app.ticker.remove(this.update, this);
     }
+
 
 
 

@@ -46,12 +46,14 @@ class Application {
     }
 
     start() {
+        console.log('start')
+        this.config.status['play'] = 'start'
         this.scenes.start("Game");
     }
     Over() {
-        console.log('abc')
         this.scenes.start("GameOver")
     }
+
 }
 
 export const App = new Application();

@@ -1,9 +1,7 @@
 import { Game } from "./Game";
-import { gameOver } from "./gameOver";
 export const Config = {
     scenes: {
         "Game": Game,
-        "GameOver": gameOver
     },
     status: {
         "play": "start",
@@ -115,7 +113,25 @@ export const Config = {
         {
             "x": 120,
             "y": 700
+        },
+        {
+            "x": 2200,
+            "y": 600
         }
+    ],
+    shuriken: [
+        {
+            "x": 140,
+            "y": 600
+        },
+        {
+            "x": 2400,
+            "y": 600
+        },
+        {
+            "x": 1500,
+            "y": 600
+        },
     ],
 
 

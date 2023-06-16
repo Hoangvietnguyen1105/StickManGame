@@ -7,14 +7,18 @@ import { camera } from "./camera";
 import * as PIXI from 'pixi.js'
 import { Sound } from "@pixi/sound";
 import { Heart } from "./heart";
+import { Kame } from './kamezoko';
 export class Game extends Scene {
     create() {
+        this.run = true
+        this.kamezoko = null
         this.createBackground();
         this.createPlayer();
         this.createBot();
         this.createWall()
         this.createHeart()
-        this.camera = new camera(this.player, this.wallList, this.botList, this.heartListItem)
+        this.createShuriken()
+        this.camera = new camera(this.player, this.wallList, this.botList, this.heartListItem, this.shurikenListItem)
         App.app.ticker.add((delta) => {
             const deltaTime = delta / PIXI.settings.TARGET_FPMS;
             this.update(deltaTime); // Truyền delta time vào phương thức follow
@@ -78,29 +82,89 @@ export class Game extends Scene {
             this.container.addChild(heart.heartSprite)
         }
     }
+    createShuriken() {
+        this.shurikenList = []
+        for (var i = 0; i < this.player.phiTieu; i++) {
+            var shuriken = new Kame()
+            shuriken.kameSprite.x = 100 + i * shuriken.kameSprite.width
+            shuriken.kameSprite.y = 110
+            this.shurikenList.push(shuriken)
+            this.container.addChild(shuriken.kameSprite)
+        }
+        this.shurikenListItem = []
+        for (var i = 0; i < App.config.shuriken.length; i++) {
+            console.log(App.config.shuriken[i]['x'])
+            var shuriken2 = new Kame()
+            this.shurikenListItem.push(shuriken2)
+            shuriken2.kameSprite.x = App.config.shuriken[i]['x']
+            shuriken2.kameSprite.y = App.config.shuriken[i]['y']
+            this.container.addChild(shuriken2.kameSprite)
+        }
+    }
+
 
     update(deltaTime) {
+
+
         // cài đặt rơi quá lâu sẽ chết
 
         if (App.config.status['play'] === 'start') {
+
+            if (this.player.kamezoko !== true && this.player.kame && !this.checkKame) {
+                if (this.shurikenList.length > 0) {
+                    var deleteShuriken = this.shurikenList.pop()
+                    this.container.removeChild(deleteShuriken.kameSprite)
+                }
+
+                console.log('asjdfjaksdjfkkkkkkkk')
+                this.checkKame = true
+                this.kamezoko = new Kame()
+                this.kamezoko.kameSprite.x = this.player.Player.x
+                this.kamezoko.kameSprite.y = this.player.Player.y
+                if (this.player.Player.scale.x === 0.5) {
+                    this.kamezoko.right = true
+                }
+                else {
+                    this.kamezoko.left = true
+                }
+                this.container.addChild(this.kamezoko.kameSprite)
+            }
+            if (this.kamezoko) {
+                this.kamezoko.kameGo()
+            }
+            if (this.kamezoko && (this.kamezoko.kameSprite.x > this.player.Player.x + 250 || this.kamezoko.kameSprite.x < this.player.Player.x - 250)) {
+                this.container.removeChild(this.kamezoko.kameSprite)
+                console.log('yes')
+                this.kamezoko.destroy()
+                this.kamezoko = null
+                this.player.kamezoko = false
+                this.checkKame = false
+            }
             if (this.player.isDown === true) {
                 this.player.timeDown += deltaTime
             }
             else {
                 this.player.timeDown = 0
             }
-            this.camera._initCamera()
+            if (this.camera)
+                this.camera._initCamera()
             this.botList.forEach(bot => {
                 if (!bot.destroyed) {
                     bot.update(deltaTime);
                 }
             });
-            this.checkLifeOfPlayer()
-            this.checkDamePlayerToBot();
-            this.checkDameBotToPlayer();
-            this.checkPlayerCollisionWithWalls()
-            this.checkBotCollisionWithWalls()
-            this.checkCollisionWithItem()
+            if (this.run === true) {
+                this.checkLifeOfPlayer()
+                this.checkDamePlayerToBot();
+                this.checkPlayerCollisionWithWalls()
+                this.checkBotCollisionWithWalls()
+                this.checkCollisionWithItem()
+                this.checkDameBotToPlayer();
+                if (this.kamezoko) {
+                    this.checkCollisionKameWithBot()
+                }
+            }
+
         }
         else {
             return
@@ -115,8 +179,6 @@ export class Game extends Scene {
                 this.container.removeChild(lastHeart.heartSprite)
                 lastHeart.destroy()
             }
-
-            console.log(this.heartList.length)
             this.player.heartDown = false
         }
     }
@@ -199,10 +261,9 @@ export class Game extends Scene {
             this.player.deltaTime = 0
             this.player.timeDown = null
             // this.notCheckThis = true
-            App.Over()
             this.container.removeChild(this.player.Player);
             this.player.gameOverSound.play()
-            this.player.stopTicker()
+
         }
     }
 
@@ -227,8 +288,15 @@ export class Game extends Scene {
         }
     }
     checkCollision(objA, objB, offsetX = App.config.player['realWidth'] / 2, offsetY = 0) {
-        const boundsA = objA.getBounds();
-        const boundsB = objB.getBounds();
+        let boundsA
+        let boundsB
+        if (objA.getBounds() && objB.getBounds()) {
+            boundsA = objA.getBounds();
+            boundsB = objB.getBounds();
+        }
+
+
+
 
         // Add the offset values to the bounds of objA
         boundsA.x += offsetX;
@@ -301,8 +369,9 @@ export class Game extends Scene {
                     else if (bot.botSprite.y >= wall.wallSprite.y + App.config.player['height'] / 2 + App.config.wall[0]['height'] / 2 && bot.isJump !== true) {
                         bot.isDown = true;
                         bot.isJump = false;
+
                     }
-                    //kiem tra dang dung ben trai cua tuong
+                    // kiem tra dang dung ben trai cua tuong
                     else if (wall.wallSprite.x > bot.botSprite.x) {
                         bot.inWallRight = true;
                         inWall = true;
@@ -314,7 +383,7 @@ export class Game extends Scene {
                     }
                 }
             });
-            if (!inWall && !bot.isJump) {
+            if (!inWall) {
                 bot.isDown = true;
                 bot.inWallRight = false;
                 bot.inWallLeft = false;
@@ -323,56 +392,60 @@ export class Game extends Scene {
         });
     }
     checkCollisionWithItem() {
-        this.heartListItem.forEach((heart, index) => {
-            if (this.checkCollision(this.player.Player, heart.heartSprite)) {
-                this.container.addChild(heart.heartSprite);
-                this.heartListItem.splice(index, 1);
-                this.heartList.push(heart)
-                heart.heartSprite.x = 100 + this.player.life * heart.heartSprite.width
-                heart.heartSprite.y = 70
+
+
+        if (this.heartListItem.length > 0) {
+            this.heartListItem.forEach((heart, index) => {
+                if (heart.heartSprite !== null && this.player.Player !== null) {
+                    if (this.checkCollision(this.player.Player, heart.heartSprite)) {
+                        this.container.addChild(heart.heartSprite);
+                        this.heartListItem.splice(index, 1);
+                        this.heartList.push(heart)
+                        heart.heartSprite.x = 100 + this.player.life * heart.heartSprite.width
+                        heart.heartSprite.y = 70
+
+                        // Thực hiện các hành động khác khi player va chạm với heart
+                        this.player.life++;
+                        console.log("Player collected a heart!");
+                    }
+                }
+
+            });
+        }
+
+        this.shurikenListItem.forEach((shuriken, index) => {
+            if (this.checkCollision(this.player.Player, shuriken.kameSprite)) {
+                this.container.addChild(shuriken.kameSprite);
+                this.shurikenListItem.splice(index, 1);
+                this.shurikenList.push(shuriken)
+                shuriken.kameSprite.x = 100 + this.player.phiTieu * shuriken.kameSprite.width
+                shuriken.kameSprite.y = 110
 
                 // Thực hiện các hành động khác khi player va chạm với heart
-                this.player.life++;
-                console.log("Player collected a heart!");
+                this.player.phiTieu++;
+                console.log("Player collected a shuriken!");
             }
         });
-    }
-    destroy() {
 
-        // Xóa tất cả các bot
+    }
+    checkCollisionKameWithBot() {
         this.botList.forEach(bot => {
-            bot.deadSound.stop();
-            bot.stopTicker();
-            this.container.removeChild(bot.botSprite);
+            if (this.checkCollision(this.kamezoko.kameSprite, bot.botSprite)) {
+                bot.botSprite.pain = true;
+                if (this.player.Player.scale.x === 0.5) {
+                    bot.scaleD = true;
+                    bot.scaleA = false;
+                }
+                else {
+                    bot.scaleD = false;
+                    bot.scaleA = true;
+                }
+            }
+
         });
-        this.botList = [];
-
-        // Xóa tất cả các wall
-        this.wallList.forEach(wall => {
-            this.container.removeChild(wall.wallSprite);
-            wall.destroy()
-        });
-        this.wallList = [];
-
-        // Xóa player
-        this.container.removeChild(this.player.Player);
-        this.player.gameOverSound.stop();
-        this.player.stopTicker();
-
-        // Xóa background
-        this.container.removeChild(this.bg);
-        this.bg.destroy();
-        //xoá heart
-        this.heartList.forEach(heart => {
-            this.container.removeChild(heart.heartSprite);
-            heart.destroy()
-        });
-        this.heartList = [];
-
-        // Xóa container chính
-        App.app.stage.removeChild(this.container);
-        this.container.destroy({ children: true });
     }
+
+
 
 
 

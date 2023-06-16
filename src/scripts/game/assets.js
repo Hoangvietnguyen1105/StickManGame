@@ -13,12 +13,13 @@ export const manifest = {
                 },
             ],
         },
+
         {
-            name: 'cat',
+            name: 'kamezoko',
             assets: [
                 {
-                    name: 'cat',
-                    srcs: 'assets/images/cat.png',
+                    name: 'kamezoko',
+                    srcs: 'assets/images/shuriken.png',
                 }
             ],
         },
@@ -97,6 +98,21 @@ export const manifest = {
             ]
         },
         {
+            name: 'kame',
+            assets: [
+                {
+                    name: 'kame',
+                    srcs: 'assets/images/kameha.png'
+                },
+
+                {
+                    name: 'kame2',
+                    srcs: 'assets/images/kameha.png'
+                },
+            ]
+        },
+
+        {
             name: 'wall',
             assets: [
                 {
@@ -113,7 +129,8 @@ export const manifest = {
                     srcs: 'assets/images/heart.png'
                 }
             ]
-        }
+        },
+
 
 
 

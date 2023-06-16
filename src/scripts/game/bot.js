@@ -59,6 +59,7 @@ export class bot {
 
             }
             else if (this.botSprite.x <= this.player.x - 50 && this.botSprite.x >= this.player.x - App.config.bot['range']) {
+                console.log('right')
                 this.botSprite.scale.x = 0.5
                 this.botSprite.botRight = true
                 this.botSprite.botLeft = false
@@ -155,6 +156,7 @@ export class bot {
     }
 
     moveRight() {
+        console.log(this.inWallRight)
         if (this.inWallRight !== true) {
             if (this.botSprite.textures !== this.runAnimation) {
                 this.botSprite.textures = this.runAnimation;
@@ -187,7 +189,9 @@ export class bot {
             }
             //hàm này check xem hành động pain đã xảy ra chưa, nếu xảy ra xong rồi mới tới hành động khác 
             else if (this.botSprite.painLoad === true) {
+
                 if (this.inWallLeft !== true && this.inWallRight !== true) {
+                    console.log('skdfjk')
                     this.painBack()
                 }
                 if (this.botSprite.currentFrame === 1) {
