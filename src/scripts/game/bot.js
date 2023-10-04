@@ -18,7 +18,7 @@ export class bot {
         this.botSprite.width = App.config.bot['width']
         this.botSprite.height = App.config.bot['height']
         this.botSprite.scale.x = 0.5
-
+        //tse
 
         this.botSprite.animationSpeed = App.config.bot['animatedSpeed']
         this.botSprite.anchor.set(0.5)
